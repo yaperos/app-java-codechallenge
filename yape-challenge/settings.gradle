@@ -1,0 +1,4 @@
+rootProject.name = 'yape-challenge'
+include 'yape-transaction-manager'
+include 'yape-transaction-validator'
+

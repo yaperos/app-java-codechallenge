@@ -1,0 +1,12 @@
+type Query{
+    transactions: [Transaction]
+}
+
+type Transaction {
+
+    internalId: ID!,
+    transferTypeId: Int!,
+    status: String!,
+    value: Float!
+
+}
