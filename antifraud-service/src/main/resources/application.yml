@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: antifraud-service
+  data:
+    mongodb:
+      database: embeded_db
+      port: 27017
+      host: localhost
+  kafka:
+    bootstrap-servers: localhost9092
+    consumer:
+      group-id: group_id
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring:
+          deserializer:
+            value:
+              delegate:
+                class: org.springframework.kafka.support.serializer.JsonDeserializer
+          json:
+            trusted:
+              packages: "com.yape.transaction.model.entity,com.yape.antifraud.model.entity"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    admin:
+      auto-create-topics: true
+      topic:
+        transactionCreated:
+          partitions: 1
+          replicas: 1
+    listener:
+      missing-topics-fatal: false
+    template:
+      default-topic: transactionCreated
+  profiles:
+    active: local
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org.springframework.data.mongodb.core.ReactiveMongoTemplate: DEBUG
+    web: TRACE
+    org.springframework.web: TRACE

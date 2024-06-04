@@ -1,0 +1,22 @@
+query GetTransaction {
+  getTransaction(transactionExternalId: "bb86c138-df4e-4f77-a4b0-71121394064d"){
+    transactionExternalId
+    accountExternalIdDebit
+    transactionExternalId
+    transferTypeId
+    value
+    status
+    createdAt
+  }
+}
+
+mutation CreateTransaction{
+
+    createTransaction(accountExternalIdDebit: "123123", accountExternalIdCredit: "321312", transferTypeId: "12", value: 999){
+    transactionExternalId
+    accountExternalIdDebit
+    value
+
+  }
+
+}
