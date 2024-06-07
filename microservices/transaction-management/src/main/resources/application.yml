@@ -1,0 +1,46 @@
+application:
+  core:
+    api:
+      path: /api/v1.0/transacion-management
+
+server:
+  port: 8093
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bd_challenge
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+  kafka:
+    bootstrap-servers: 'localhost:9092'
+    consumer:
+      group-id: yape-group
+      offset-mode: 'earliest'
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: com.yape.fraudevaluation.model.dto
+    producer:
+      properties:
+        spring:
+          json:
+            add:
+              type:
+                headers: false
+      key-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+redis:
+  url: 'http://localhost:6379'
+  ttl-secconds: 60
+
+transaction-management:
+  kafka-topics:
+    fraud-evaluation: 'topic-fraud'
+    transaction: 'topic-transaction'
+
