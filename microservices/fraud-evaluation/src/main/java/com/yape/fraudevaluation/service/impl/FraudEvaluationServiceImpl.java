@@ -32,7 +32,7 @@ public class FraudEvaluationServiceImpl implements FraudEvaluationService {
     }
 
     private void evaluateValue(TransactionDTO transaction) {
-        transaction.setTransactionState( (transaction.getTransactionValue().compareTo(valueLimit) > 0)
+        transaction.setTransactionState((transaction.getTransactionValue().compareTo(valueLimit) > 0)
             ? TransactionStatusEnum.REJECTED.getDescription()
             : TransactionStatusEnum.APPROBED.getDescription());
     }

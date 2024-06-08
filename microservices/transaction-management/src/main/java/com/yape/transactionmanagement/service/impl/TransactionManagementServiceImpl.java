@@ -29,6 +29,7 @@ public class TransactionManagementServiceImpl implements TransactionManagementSe
     public Flux<TransactionResponse> getAllTransactions() {
         return transactionRepositoryConnector.findAllTransactions()
             .flatMapMany(Flux::fromIterable)
+            .onBackpressureBuffer()
             .map(TransactionBuilder::buildTransactionResponse);
     }
 

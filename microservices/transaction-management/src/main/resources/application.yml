@@ -1,7 +1,7 @@
 application:
   core:
     api:
-      path: /api/v1.0/transacion-management
+      path: /api/v1.0/transaction-management
 
 server:
   port: 8093

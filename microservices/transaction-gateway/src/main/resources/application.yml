@@ -1,0 +1,14 @@
+spring:
+  graphql:
+    graphiql:
+      enabled: true
+      path: '/graphiql'
+
+server:
+  port: 8095
+
+http-client:
+  transaction-management:
+    base-url: 'http://localhost:8093/api/v1.0/transaction-management'
+    read-timeout: 15000
+    write-timeout: 15000

@@ -11,11 +11,7 @@
     <artifactId>transaction-gateway</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>transaction-gateway</name>
-    <description>Transaction Management Gateway</description>
-
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
+    <description>Transaction Gateway Service</description>
 
     <dependencies>
 
@@ -35,6 +31,26 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
+        <!-- REACTOR LIBRARY -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <!-- REACTOR LIBRARY -->
+
+        <!-- GRAPHQL LIBRARY -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-graphql</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.graphql-java</groupId>
+            <artifactId>graphql-java-extended-scalars</artifactId>
+            <version>22.0</version>
+        </dependency>
+        <!-- GRAPHQL LIBRARY -->
 
     </dependencies>
 
