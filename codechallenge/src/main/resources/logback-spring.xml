@@ -1,73 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <!-- Incluye las configuraciones por defecto de Logback proporcionadas por Spring Boot. 
-         Esto incluye la configuración de los niveles de log, los formatos de log y los appenders por defecto. -->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-    <!-- Incluye el appender de consola de Logback proporcionado por Spring Boot. 
-         Este appender escribe los logs en la consola del sistema. -->
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
     
-    <!-- Configura un appender personalizado para manejar la rotación de archivos de log. 
-         Este appender escribe los logs en un archivo y rota el archivo de log basado en el tiempo. -->
     <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!-- Especifica el archivo de log principal al que se escribirá. 
-             ${LOG_FILE} es una variable que debe ser definida en tu configuración de Spring Boot.
-             Por ejemplo, en tu archivo application.yaml, puedes tener:
-             logging:
-               file: /path/to/your/logfile.log -->
+
         <file>${LOG_FILE}</file>
         <encoder>
-            <!-- Establece el patrón de formato para las entradas de log. 
-                 ${FILE_LOG_PATTERN} es una variable que debe ser definida en tu configuración de Spring Boot.
-                 Por ejemplo, en tu archivo application.yaml, puedes tener:
-                 logging:
-                   pattern:
-                     file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" -->
+
             <pattern>${FILE_LOG_PATTERN}</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- Define el patrón del nombre para los archivos de log archivados, con una rotación diaria. 
-                 Los archivos de log se archivarán con un nombre basado en la fecha y se comprimirán en formato gzip. -->
+
             <fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.gz</fileNamePattern>
-            <!-- Limita el historial de archivos de log archivados a los últimos 30 días. 
-                 Los archivos de log más antiguos se eliminarán. -->
+
             <maxHistory>30</maxHistory>
         </rollingPolicy>
     </appender>
 
-    <!--*******************************************************************-->
-    <!-- <property name="MI_LOG_FILE" value="${LOG_FILE}miArchivoDeLog.log" /> -->
-    <!-- Configura un appender personalizado. En este caso, se configura un appender de archivo con rotación basada en el tiempo. -->
-    <!-- <appender name="MI_APPENDER_PERSONALIZADO" class="ch.qos.logback.core.rolling.RollingFileAppender"> -->
-        <!-- Especifica el archivo de log principal al que se escribirá. -->
-        <!-- <file>{MI_LOG_FILE}</file> -->
-        <!-- <encoder> -->
-            <!-- Establece el patrón de formato para las entradas de log. -->
-            <!-- <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern> -->
-        <!-- </encoder> -->
-        <!-- <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> -->
-            <!-- Define el patrón del nombre para los archivos de log archivados, con una rotación diaria. -->
-            <!-- <fileNamePattern>{MI_LOG_FILE}.%d{yyyy-MM-dd}.gz</fileNamePattern> -->
-            <!-- Limita el historial de archivos de log archivados a los últimos 30 días. -->
-            <!-- <maxHistory>30</maxHistory> -->
-        <!-- </rollingPolicy> -->
-    <!-- </appender> -->
-    <!--*******************************************************************-->
-
-    <!-- Configura el nivel de registro para un paquete específico. 
-         En este caso, se configura el nivel de registro a DEBUG para el paquete com.example.myapp. -->
-    <!-- <logger name="com.example.myapp" level="DEBUG"> -->
-        <!-- Asocia el appender personalizado al logger de este paquete específico. -->
-        <!-- <appender-ref ref="MI_APPENDER_PERSONALIZADO" /> -->
-    <!-- </logger> -->
-
-    <!--*******************************************************************-->
-
-    <!-- Establece el nivel de log a INFO para la aplicación y asocia el appender de archivo personalizado. 
-         Los niveles de log posibles son TRACE, DEBUG, INFO, WARN, ERROR, ALL y OFF. -->
     <root level="INFO">
         <appender-ref ref="FILE-ROLLING" />
-        <!--appender-ref ref="MI_APPENDER_PERSONALIZADO" /-->
     </root>
 </configuration>
