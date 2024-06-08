@@ -1,0 +1,35 @@
+scalar BigDecimal
+
+type TransactionType {
+    name: String
+}
+
+type TransactionState {
+    name: String
+}
+
+type Transaction {
+    transactionExternalId: String!
+    transactionType: TransactionType!
+    transactionStatus: TransactionState!
+    value: BigDecimal!
+    createdAt: String!
+}
+
+input RegisterTransactionRequest {
+    accountExternalIdDebit: String!
+    accountExternalIdCredit: String!
+    tranferTypeId: Int!
+    value: BigDecimal!
+}
+
+
+
+type Query {
+    getAllTransactions(limit: Int, offset: Int): [Transaction]!
+    getTransactionByCode(transactionCode: String): Transaction
+}
+
+type Mutation {
+    createTransaction(transactionBody: RegisterTransactionRequest): Boolean
+}

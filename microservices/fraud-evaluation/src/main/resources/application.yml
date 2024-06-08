@@ -1,0 +1,37 @@
+application:
+  core:
+    api:
+      path: /api/v1.0/fraud-evaluation
+
+server:
+  port: 8094
+  address:
+  compression:
+    mime-types:
+
+spring:
+  kafka:
+    bootstrap-servers: 'localhost:9092'
+    consumer:
+      group-id: yape-group
+      offset-mode: 'earliest'
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: com.yape.transactionmanagement.model.dto
+    producer:
+      properties:
+        spring:
+          json:
+            add:
+              type:
+                headers: false
+      key-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+fraud-evaluation:
+  kafka-topics:
+    fraud-evaluation: 'topic-fraud'
+    transaction: 'topic-transaction'
+  value-limit: 1000
