@@ -1,4 +1,12 @@
 version: "3.7"
+
+volumes:
+  mysql-data-busness:
+    driver: local      
+networks:
+  mysql-networks-busness:
+    driver: bridge
+
 services:
   postgres:
     image: postgres:14
@@ -23,3 +31,21 @@ services:
       KAFKA_JMX_PORT: 9991
     ports:
       - 9092:9092
+  db:
+    build: .
+    image: mysql:8.2.0
+    #Solo para algunas imagenes y arquitecturas especificas de procesador (MacOs - M2)
+    platform: linux/amd64
+    container_name: mysql-busness-challenge
+    restart: always
+    ports:
+       - "33061:3306"
+    volumes:
+      - mysql-data-busness:/var/lib/mysql:delegated
+    networks:
+      - mysql-networks-busness
+    environment:
+      - MYSQL_DATABASE=core_challenge
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=root
