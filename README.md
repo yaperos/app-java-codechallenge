@@ -94,7 +94,7 @@ Se ejecutara los contenedores necesarios para solucionar
 el alcance basico que se solicito en el Challenge
 
 > [!IMPORTANT]
-> Al Ejecuar ser ejecutado el Docker-Compose, las APIs se exponen en el puerto "8092" y cuando se ejecuta de forma local se ejecuta en el puerto "8091".
+> Al ser ejecutado el Docker-Compose, las APIs se exponen en el puerto "8092" y cuando se ejecuta de forma local se ejecuta en el puerto "8091".
 
 API para generar una nueva transferencia.
 ```bash
