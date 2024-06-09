@@ -127,11 +127,50 @@ API para consultar por un Id especifico
 ```bash
 curl --location 'http://localhost:8091/transactions/4b2a815f-090b-4e4d-ba20-760cbad4c43d'
 ```
+La respuesta sera una similar a la siguientes
+```bash
+{
+    "id": "4b2a815f-090b-4e4d-ba20-760cbad4c43d",
+    "accountExternalIdDebit": "550e8400-e29b-41d4-a716-446655447700",
+    "accountExternalIdCredit": "550e8400-e29b-41d4-a716-446655447701",
+    "transferTypeId": 1,
+    "value": 99.10,
+    "transactionStatus": "approved",
+    "transactionType": "1",
+    "createdAt": "2024-06-08T23:33:22.081-05:00"
+}
+```
 
-API para consultar dotos las almacenadas
+API para consultar todas transferencias almacenadas
 ```bash
 curl --location 'http://localhost:8092/transactions'
 
+```
+
+La respuesta sera una similar a la siguientes
+```bash
+[
+    {
+        "id": "2a6d9387-238a-4f07-9017-fd7506a6fd68",
+        "accountExternalIdDebit": "550e8400-e29b-41d4-a716-446655447700",
+        "accountExternalIdCredit": "550e8400-e29b-41d4-a716-446655447701",
+        "transferTypeId": 1,
+        "value": 99.10,
+        "transactionStatus": "approved",
+        "transactionType": "1",
+        "createdAt": "2024-06-08T23:46:47.985-05:00"
+    },
+    {
+        "id": "ff2a75b5-9ba0-40a8-9329-e67a2ec19037",
+        "accountExternalIdDebit": "550e8400-e29b-41d4-a716-446655447700",
+        "accountExternalIdCredit": "550e8400-e29b-41d4-a716-446655447701",
+        "transferTypeId": 1,
+        "value": 9900.10,
+        "transactionStatus": "rejected",
+        "transactionType": "1",
+        "createdAt": "2024-06-08T23:47:37.328-05:00"
+    }
+]
 ```
 
 El Flujo consiste en:
@@ -145,3 +184,10 @@ El Flujo consiste en:
      ejecutado por el proceso de anti-fraude, el cual nos 
      indicara si la transferencia fue aceptada o rechazada.
 
+
+Como parte de la solucion se tienen las siguientes consideraciones:
+
+    1.- Se agrego pool de conexiones para la BD.
+    2.- Se agrego TTL para los mensaje publicados.
+    3.- Se agrego el manejo del logback.
+    4.- Se agrego el manejo de perfiles para la creacion de imagenes con docker.
