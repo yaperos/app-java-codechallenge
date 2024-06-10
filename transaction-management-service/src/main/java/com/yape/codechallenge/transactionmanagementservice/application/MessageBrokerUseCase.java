@@ -36,6 +36,6 @@ public class MessageBrokerUseCase implements MessageBrokerInputPort {
     @Override
     public Transactions getById(String table, String id) {
         Map<String, Object> queryResult = queryRepository.getById(id, classes.get(table));
-        return MapTransformUtils.map2Transactions(queryResult);
+        return MapTransformUtils.mapToTransaction(queryResult);
     }
 }

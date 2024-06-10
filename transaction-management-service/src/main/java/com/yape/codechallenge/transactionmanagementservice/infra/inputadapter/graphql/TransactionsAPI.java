@@ -4,6 +4,7 @@ import com.yape.codechallenge.transactionmanagementservice.domain.Transactions;
 import com.yape.codechallenge.transactionmanagementservice.infra.inputport.MessageBrokerInputPort;
 import com.yape.codechallenge.transactionmanagementservice.infra.inputport.TransactionsInputPort;
 import com.yape.codechallenge.transactionmanagementservice.infra.inputport.ValidatorInputPort;
+import com.yape.codechallenge.transactionmanagementservice.infra.utils.ConstantsUtils;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -34,7 +35,7 @@ public class TransactionsAPI {
 
     @QueryMapping
     public Transactions getTransaction(@Argument String transactionExternalId) {
-        return  messageBrokerInputPort.getById("transactions", transactionExternalId);
+        return  messageBrokerInputPort.getById(ConstantsUtils.TRANSACTIONS_NAME, transactionExternalId);
     }
 
 }

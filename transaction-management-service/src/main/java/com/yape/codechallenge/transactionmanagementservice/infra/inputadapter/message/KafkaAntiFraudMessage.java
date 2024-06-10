@@ -2,6 +2,7 @@ package com.yape.codechallenge.transactionmanagementservice.infra.inputadapter.m
 
 import com.yape.codechallenge.transactionmanagementservice.domain.Transactions;
 import com.yape.codechallenge.transactionmanagementservice.infra.inputport.TransactionsInputPort;
+import com.yape.codechallenge.transactionmanagementservice.infra.utils.ConstantsUtils;
 import com.yape.codechallenge.transactionmanagementservice.infra.utils.ConvertUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -20,7 +21,7 @@ public class KafkaAntiFraudMessage {
         this.transactionsInputPort = transactionsInputPort;
     }
 
-    @KafkaListener(topics = "transaction-status", groupId = "group3")
+    @KafkaListener(topics = ConstantsUtils.EventConstants.CONSUMER_AF_TOPIC, groupId = ConstantsUtils.EventConstants.GROUP_ID_3)
     public void listen(String message) {
         try {
             log.info("Received message: {}", message);

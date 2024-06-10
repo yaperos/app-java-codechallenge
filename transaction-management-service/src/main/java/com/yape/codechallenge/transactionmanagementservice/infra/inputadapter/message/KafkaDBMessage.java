@@ -1,6 +1,7 @@
 package com.yape.codechallenge.transactionmanagementservice.infra.inputadapter.message;
 
 import com.yape.codechallenge.transactionmanagementservice.infra.inputport.MessageBrokerInputPort;
+import com.yape.codechallenge.transactionmanagementservice.infra.utils.ConstantsUtils;
 import com.yape.codechallenge.transactionmanagementservice.infra.utils.ConvertUtils;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -18,7 +19,7 @@ public class KafkaDBMessage {
         this.messageBrokerInputPort = messageBrokerInputPort;
     }
 
-    @KafkaListener(topicPattern = "cqrs-.public.*", groupId = "group1")
+    @KafkaListener(topicPattern = ConstantsUtils.EventConstants.CONSUMER_DB_TOPIC, groupId = ConstantsUtils.EventConstants.GROUP_ID_1)
     public void messageHandler(@Payload( required = false) String eventMsg) {
         if ( eventMsg == null ) return;
 

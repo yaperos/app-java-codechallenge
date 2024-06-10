@@ -1,6 +1,7 @@
 package com.yape.codechallenge.transactionmanagementservice.infra.outputadapter.redisrepository;
 
 import com.yape.codechallenge.transactionmanagementservice.infra.outputport.QueryRepository;
+import com.yape.codechallenge.transactionmanagementservice.infra.utils.ConstantsUtils;
 import com.yape.codechallenge.transactionmanagementservice.infra.utils.ConvertUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ public class RedisRepository implements QueryRepository {
     public void  save(Map<String, Object> reg, Class<?> clazz) {
         redisTemplate.opsForHash().put(
                 getHashFromClass( clazz ),
-                reg.get("transactionexternalid"),
+                reg.get(ConstantsUtils.TransactionMapper.TRANSACTION_EXTERNAL_ID),
                 ConvertUtils.map2Jsonstring( reg )
         );
     }
