@@ -5,7 +5,6 @@ import com.yape.codechallenge.antifraudvalidationservice.event.OutComingUpdating
 import com.yape.codechallenge.antifraudvalidationservice.service.AntiFraudValidationService;
 import com.yape.codechallenge.antifraudvalidationservice.util.ConstantsUtils;
 import com.yape.codechallenge.antifraudvalidationservice.util.ConvertUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -14,14 +13,17 @@ import java.util.Map;
 
 @Service
 public class TransactionEventListener {
-    @Autowired
-    private AntiFraudValidationService antiFraudValidationService;
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private final AntiFraudValidationService antiFraudValidationService;
+    private final KafkaTemplate<String, String> kafkaTemplate;
+
+    public TransactionEventListener(AntiFraudValidationService antiFraudValidationService, KafkaTemplate<String, String> kafkaTemplate) {
+        this.antiFraudValidationService = antiFraudValidationService;
+        this.kafkaTemplate = kafkaTemplate;
+    }
 
     @KafkaListener(topicPattern = ConstantsUtils.CONSUMER_TOPIC, groupId = ConstantsUtils.GROUP_ID)
     public void consumeEvent(String eventMsg) {
-        Map<String, Object> eventMap = ConvertUtils.jsonstring2Map(eventMsg);
+        Map<String, Object> eventMap = ConvertUtils.convertJsonStringToMap(eventMsg);
         IncomingCreationEvent incomingCreationEvent = ConvertUtils.messageMapToTransactionEvent(eventMap);
         OutComingUpdatingEvent outComingUpdatingEvent = antiFraudValidationService.evaluateTransactionFraudRisk(incomingCreationEvent);
 

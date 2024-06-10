@@ -3,32 +3,43 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yape.codechallenge.antifraudvalidationservice.event.IncomingCreationEvent;
 import com.yape.codechallenge.antifraudvalidationservice.event.OutComingUpdatingEvent;
+import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
+@Slf4j
 public class ConvertUtils {
-    private static ObjectMapper objectMapper = new ObjectMapper();
-    public static Map<String, Object> jsonstring2Map( String json ) {
-        if ( json == null ) return new HashMap<String, Object>();
-
-        try {
-            return objectMapper.readValue( json, Map.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        return new HashMap<String, Object>();
+    private ConvertUtils() {
+    }
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+    public static Map<String, Object> convertJsonStringToMap(String jsonString) {
+        return Optional.ofNullable(jsonString)
+                .map(ConvertUtils::tryConvertJsonToMap)
+                .orElseGet(ConvertUtils::createEmptyMap);
     }
 
+    private static Map<String, Object> tryConvertJsonToMap(String jsonString) {
+        try {
+            return objectMapper.readValue(jsonString, Map.class);
+        } catch (JsonProcessingException e) {
+            log.error("Error while converting JSON to Map", e);
+            return createEmptyMap();
+        }
+    }
+
+    private static Map<String, Object> createEmptyMap() {
+        return new HashMap<>();
+    }
     public static String outcomingEventToJsonString(OutComingUpdatingEvent outComingUpdatingEvent) {
         try {
             return objectMapper.writeValueAsString(outComingUpdatingEvent);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            log.error("Error while converting OutComingUpdatingEvent to JSON", e);
             return null;
         }
     }

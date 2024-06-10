@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class KafkaConfig {
+    private KafkaConfig() {
+    }
     @Configuration
     public static class KafkaProducerConfig {
 
