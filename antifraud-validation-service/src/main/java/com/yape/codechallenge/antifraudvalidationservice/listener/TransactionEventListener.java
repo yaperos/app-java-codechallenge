@@ -21,7 +21,7 @@ public class TransactionEventListener {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    @KafkaListener(topicPattern = ConstantsUtils.CONSUMER_TOPIC, groupId = ConstantsUtils.GROUP_ID)
+    @KafkaListener(topicPattern = ConstantsUtils.EventConstants.CONSUMER_TOPIC, groupId = ConstantsUtils.EventConstants.GROUP_ID)
     public void consumeEvent(String eventMsg) {
         Map<String, Object> eventMap = ConvertUtils.convertJsonStringToMap(eventMsg);
         IncomingCreationEvent incomingCreationEvent = ConvertUtils.messageMapToTransactionEvent(eventMap);
@@ -29,7 +29,7 @@ public class TransactionEventListener {
 
         String convertedJsonString = ConvertUtils.outcomingEventToJsonString(outComingUpdatingEvent);
         if(incomingCreationEvent.getOperationType().equals(ConstantsUtils.TRANSACTION_DB_OPERATION_CREATE)) {
-            kafkaTemplate.send(ConstantsUtils.PRODUCER_TOPIC, convertedJsonString);
+            kafkaTemplate.send(ConstantsUtils.EventConstants.PRODUCER_TOPIC, convertedJsonString);
         }
     }
 
