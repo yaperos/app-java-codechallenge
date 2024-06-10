@@ -36,6 +36,7 @@ public class MessageBrokerUseCase implements MessageBrokerInputPort {
     @Override
     public Transactions getById(String table, String id) {
         Map<String, Object> queryResult = queryRepository.getById(id, classes.get(table));
+        if(queryResult == null || queryResult.isEmpty()) throw new IllegalArgumentException("Transaction not found with provided id");
         return MapTransformUtils.mapToTransaction(queryResult);
     }
 }

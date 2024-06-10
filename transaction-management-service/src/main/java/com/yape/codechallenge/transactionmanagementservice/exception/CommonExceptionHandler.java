@@ -13,4 +13,11 @@ public class CommonExceptionHandler {
                 .build();
     }
 
+    @GraphQlExceptionHandler
+    public GraphQLError handleRuntimeException(RuntimeException e) {
+        return GraphQLError.newError()
+                .message(e.getMessage())
+                .build();
+    }
+
 }

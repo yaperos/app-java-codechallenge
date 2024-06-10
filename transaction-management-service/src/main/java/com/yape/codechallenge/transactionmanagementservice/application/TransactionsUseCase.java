@@ -51,6 +51,8 @@ public class TransactionsUseCase implements TransactionsInputPort {
             transaction.setTransactionStatus(TransactionStatus.valueOf(status));
             String sql = "UPDATE Transactions SET transactionStatus = ? WHERE transactionExternalId = ?";
             jdbcTemplate.update(sql, status, externalTransactionId);
+        }else{
+            throw new IllegalArgumentException("Transaction not found");
         }
         return transaction;
     }
