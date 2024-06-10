@@ -26,7 +26,7 @@ public class TransactionsUseCase implements TransactionsInputPort {
     @Override
     public Transactions createTransaction(String externalIdDebit, String externalIdCredit, int transferTypeId, BigDecimal value) {
         Transactions transaction = Transactions.builder()
-                .transactionExternalId(UUID.randomUUID().toString())
+                .transactionExternalId(generateTXId())
                 .accountExternalIdDebit(externalIdDebit)
                 .accountExternalIdCredit(externalIdCredit)
                 .transferTypeId(transferTypeId)
@@ -36,6 +36,12 @@ public class TransactionsUseCase implements TransactionsInputPort {
                 .value(value)
                 .build();
         return entityRepository.save(transaction);
+    }
+
+    public String generateTXId() {
+        String uuid = UUID.randomUUID().toString();
+        String truncatedUuid = uuid.substring(0, 34);
+        return "TX" + truncatedUuid;
     }
 
     @Override
@@ -49,8 +55,4 @@ public class TransactionsUseCase implements TransactionsInputPort {
         return transaction;
     }
 
-    @Override
-    public Transactions getTransactionById(String customerId) {
-        return null;
-    }
 }

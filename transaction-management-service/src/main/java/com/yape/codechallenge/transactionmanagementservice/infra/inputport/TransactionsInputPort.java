@@ -6,9 +6,6 @@ import java.math.BigDecimal;
 
 
 public interface TransactionsInputPort {
-
-    public Transactions createTransaction(String externalIdDebit, String externalIdCredit, int transferTypeId, BigDecimal value);
-    public Transactions updateTransaction(String externalTransactionId, String status);
-    public Transactions getTransactionById(String customerId);
-
+    Transactions createTransaction(String externalIdDebit, String externalIdCredit, int transferTypeId, BigDecimal value);
+    Transactions updateTransaction(String externalTransactionId, String status);
 }
