@@ -3,6 +3,7 @@ package com.yape.codechallenge.transactionmanagementservice.infra.outputadapter.
 import com.yape.codechallenge.transactionmanagementservice.domain.TransactionStatus;
 import com.yape.codechallenge.transactionmanagementservice.domain.TransactionType;
 import com.yape.codechallenge.transactionmanagementservice.infra.outputport.CommandRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -20,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
+@Slf4j
 @Component
 public class PostgresRepository implements CommandRepository {
 
@@ -54,7 +56,7 @@ public class PostgresRepository implements CommandRepository {
 
                         return value;
                     } catch (IllegalAccessException e) {
-                        e.printStackTrace();
+                        log.error("Error saving entity", e);
                         return null;
                     }
                 })
@@ -87,52 +89,59 @@ public class PostgresRepository implements CommandRepository {
             this.clazz = clazz;
         }
 
-
-        @Override
-        public T mapRow(ResultSet rs, int rowNum) throws SQLException {
-            try {
-                Method builderMethod = clazz.getMethod("builder");
-                Object row = builderMethod.invoke(null);
-                Method[] methods = row.getClass().getDeclaredMethods();
-
-                for (Method method : methods) {
-                    int pos = -1;
-                    try {
-                        pos = rs.findColumn(method.getName());
-                    } catch (SQLException ex) {
-                    }
-
-                    if (pos != -1) {
-                        Object fieldValue = rs.getObject(pos);
-
-                        // Check if the field is an enum
-                        Class<?>[] parameterTypes = method.getParameterTypes();
-                        if (parameterTypes.length > 0 && parameterTypes[0].isEnum()) {
-                            // Convert the string to an enum
-                            fieldValue = Enum.valueOf((Class<Enum>) parameterTypes[0], (String) fieldValue);
-                        }
-
-                        // Check if the field is a LocalDateTime
-                        if (parameterTypes.length > 0 && parameterTypes[0].equals(LocalDateTime.class)) {
-                            // Convert the Timestamp to LocalDateTime
-                            Timestamp timestamp = rs.getTimestamp(pos);
-                            if (timestamp != null) {
-                                fieldValue = timestamp.toLocalDateTime();
-                            }
-                        }
-
-                        method.invoke(row, fieldValue);
-                    }
+    @Override
+    public T mapRow(ResultSet rs, int rowNum) throws SQLException {
+        try {
+            Object row = createBuilderInstance();
+            Method[] methods = row.getClass().getDeclaredMethods();
+            for (Method method : methods) {
+                String columnName = method.getName();
+                if (isColumnPresent(rs, columnName)) {
+                    Object fieldValue = getFieldValue(rs, method, columnName);
+                    method.invoke(row, fieldValue);
                 }
-
-                return (T) row.getClass().getMethod("build").invoke(row);
-            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-                     | NoSuchMethodException | SecurityException e) {
-                e.printStackTrace();
             }
+            return buildRow(row);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+                 | NoSuchMethodException | SecurityException e) { log.error("Error mapping row", e); }
+        return null;
+    }
 
-            return null;
+    private Object createBuilderInstance() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        Method builderMethod = clazz.getMethod("builder");
+        return builderMethod.invoke(null);
+    }
+
+    private boolean isColumnPresent(ResultSet rs, String columnName) {
+        try {
+            rs.findColumn(columnName);
+            return true;
+        } catch (SQLException ex) {
+            return false;
         }
+    }
 
+    private Object getFieldValue(ResultSet rs, Method method, String columnName) throws SQLException {
+        Object fieldValue = rs.getObject(columnName);
+        Class<?>[] parameterTypes = method.getParameterTypes();
+
+        if (parameterTypes.length > 0) {
+            if (parameterTypes[0].isEnum()) {
+                fieldValue = Enum.valueOf((Class<Enum>) parameterTypes[0], (String) fieldValue);
+            } else if (parameterTypes[0].equals(LocalDateTime.class)) {
+                fieldValue = convertToDateTime(rs, columnName);
+            }
+        }
+        return fieldValue;
+    }
+
+    private LocalDateTime convertToDateTime(ResultSet rs, String columnName) throws SQLException {
+        Timestamp timestamp = rs.getTimestamp(columnName);
+        return timestamp != null ? timestamp.toLocalDateTime() : null;
+    }
+
+    private T buildRow(Object row) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        return (T) row.getClass().getMethod("build").invoke(row);
+    }
     }
 }
