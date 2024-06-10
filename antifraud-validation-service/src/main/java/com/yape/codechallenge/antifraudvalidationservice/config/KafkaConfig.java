@@ -1,5 +1,6 @@
 package com.yape.codechallenge.antifraudvalidationservice.config;
 
+import com.yape.codechallenge.antifraudvalidationservice.util.ConstantsUtils;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -13,12 +14,12 @@ import java.util.Map;
 
 public class KafkaConfig {
     @Configuration
-    public class KafkaProducerConfig {
+    public static class KafkaProducerConfig {
 
         @Bean
         public ProducerFactory<String, String> producerFactory() {
             Map<String, Object> configProps = new HashMap<>();
-            configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:29092");
+            configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, ConstantsUtils.KAFKA_BOOSTRAP_SERVERS);
             configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
             configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
             return new DefaultKafkaProducerFactory<>(configProps);

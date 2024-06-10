@@ -34,19 +34,19 @@ public class ConvertUtils {
     }
 
     public static IncomingCreationEvent messageMapToTransactionEvent(Map<String, Object> messageMap) {
-        Map<String, Object> payload = (Map<String, Object>) messageMap.get("payload");
-        Map<String, Object> messagePayload = (Map<String, Object>) payload.get("after");
+        Map<String, Object> payload = (Map<String, Object>) messageMap.get(ConstantsUtils.MAP_PAYLOAD);
+        Map<String, Object> messagePayload = (Map<String, Object>) payload.get(ConstantsUtils.MAP_AFTER);
 
         IncomingCreationEvent incomingCreationEvent = new IncomingCreationEvent();
-        incomingCreationEvent.setTransactionExternalId((String) messagePayload.get("transactionexternalid"));
-        incomingCreationEvent.setTransactionReceiptStatus((String) messagePayload.get("transactionstatus"));
-        incomingCreationEvent.setTransactionReceiptValue(getBigDecimalValueFromMap((Map<String, Object>) messagePayload.get("value")));
-        incomingCreationEvent.setOperationType(payload.get("op").toString());
-        incomingCreationEvent.setOrigin((String) ((Map<String, Object>) payload.get("source")).get("table"));
+        incomingCreationEvent.setTransactionExternalId((String) messagePayload.get(ConstantsUtils.MAP_TRANSACTION_EXTERNAL_ID));
+        incomingCreationEvent.setTransactionReceiptStatus((String) messagePayload.get(ConstantsUtils.MAP_TRANSACTION_STATUS));
+        incomingCreationEvent.setTransactionReceiptValue(getBigDecimalValueFromMap((Map<String, Object>) messagePayload.get(ConstantsUtils.MAP_VALUE)));
+        incomingCreationEvent.setOperationType(payload.get(ConstantsUtils.MAP_OP).toString());
+        incomingCreationEvent.setOrigin((String) ((Map<String, Object>) payload.get(ConstantsUtils.MAP_SOURCE)).get(ConstantsUtils.MAP_TABLE));
         return incomingCreationEvent;
     }
 
     private static BigDecimal getBigDecimalValueFromMap(Map<String, Object> base64Valuemap) {
-        return new BigDecimal(new BigInteger(Base64.getDecoder().decode(base64Valuemap.get("value").toString())), (Integer) base64Valuemap.get("scale"));
+        return new BigDecimal(new BigInteger(Base64.getDecoder().decode(base64Valuemap.get(ConstantsUtils.MAP_VALUE).toString())), (Integer) base64Valuemap.get(ConstantsUtils.MAP_SCALE));
     }
 }
