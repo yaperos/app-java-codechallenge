@@ -3,7 +3,6 @@ package com.yape.codechallenge.transactionmanagementservice.infra.inputadapter.g
 import com.yape.codechallenge.transactionmanagementservice.domain.Transactions;
 import com.yape.codechallenge.transactionmanagementservice.infra.inputport.MessageBrokerInputPort;
 import com.yape.codechallenge.transactionmanagementservice.infra.inputport.TransactionsInputPort;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -13,10 +12,15 @@ import java.math.BigDecimal;
 
 @Controller
 public class TransactionsAPI {
-    @Autowired
+    final
     TransactionsInputPort transactionsInputPort;
-    @Autowired
+    final
     MessageBrokerInputPort messageBrokerInputPort;
+
+    public TransactionsAPI(TransactionsInputPort transactionsInputPort, MessageBrokerInputPort messageBrokerInputPort) {
+        this.transactionsInputPort = transactionsInputPort;
+        this.messageBrokerInputPort = messageBrokerInputPort;
+    }
 
     @MutationMapping
     public Transactions createTransaction(@Argument String accountExternalIdDebit,@Argument String accountExternalIdCredit, @Argument int transferTypeId, @Argument BigDecimal value) {

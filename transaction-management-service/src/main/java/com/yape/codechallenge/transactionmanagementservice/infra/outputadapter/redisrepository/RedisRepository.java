@@ -2,15 +2,18 @@ package com.yape.codechallenge.transactionmanagementservice.infra.outputadapter.
 
 import com.yape.codechallenge.transactionmanagementservice.infra.outputport.QueryRepository;
 import com.yape.codechallenge.transactionmanagementservice.infra.utils.ConvertUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 @Component
 public class RedisRepository implements QueryRepository {
-    @Autowired
+    final
     RedisTemplate<String, Object> redisTemplate;
+
+    public RedisRepository(RedisTemplate<String, Object> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     @Override
     public void  save(Map<String, Object> reg, Class<?> clazz) {

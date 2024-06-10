@@ -2,7 +2,6 @@ package com.yape.codechallenge.transactionmanagementservice.infra.inputadapter.m
 
 import com.yape.codechallenge.transactionmanagementservice.infra.inputport.MessageBrokerInputPort;
 import com.yape.codechallenge.transactionmanagementservice.infra.utils.ConvertUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
@@ -12,8 +11,12 @@ import java.util.Map;
 @Service
 public class KafkaDBMessage {
 
-    @Autowired
+    final
     MessageBrokerInputPort messageBrokerInputPort;
+
+    public KafkaDBMessage(MessageBrokerInputPort messageBrokerInputPort) {
+        this.messageBrokerInputPort = messageBrokerInputPort;
+    }
 
     @KafkaListener(topicPattern = "cqrs-.public.*", groupId = "group1")
     public void messageHandler(@Payload( required = false) String eventMsg) {

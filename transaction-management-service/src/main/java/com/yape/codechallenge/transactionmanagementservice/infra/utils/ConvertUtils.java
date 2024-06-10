@@ -31,7 +31,7 @@ public class ConvertUtils {
     }
 
     public static Map<String, Object> jsonstring2Map( String json ) {
-        if ( json == null ) return new HashMap<String, Object>();
+        if ( json == null ) return new HashMap<>();
 
         try {
             return objectMapper.readValue( json, Map.class);
@@ -39,7 +39,7 @@ public class ConvertUtils {
             e.printStackTrace();
         }
 
-        return new HashMap<String, Object>();
+        return new HashMap<>();
     }
 
     public static LocalDateTime unixLongToLocalDateTime(long unixTimeSeg) {

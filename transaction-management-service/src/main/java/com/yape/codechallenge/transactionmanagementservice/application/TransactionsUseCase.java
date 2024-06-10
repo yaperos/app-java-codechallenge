@@ -5,7 +5,6 @@ import com.yape.codechallenge.transactionmanagementservice.domain.TransactionTyp
 import com.yape.codechallenge.transactionmanagementservice.domain.Transactions;
 import com.yape.codechallenge.transactionmanagementservice.infra.inputport.TransactionsInputPort;
 import com.yape.codechallenge.transactionmanagementservice.infra.outputport.CommandRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -15,10 +14,14 @@ import java.util.UUID;
 
 @Component
 public class TransactionsUseCase implements TransactionsInputPort {
-    @Autowired
+    final
     CommandRepository entityRepository;
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+
+    public TransactionsUseCase(CommandRepository entityRepository, JdbcTemplate jdbcTemplate) {
+        this.entityRepository = entityRepository;
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public Transactions createTransaction(String externalIdDebit, String externalIdCredit, int transferTypeId, BigDecimal value) {
