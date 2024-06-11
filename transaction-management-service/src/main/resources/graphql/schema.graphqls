@@ -1,0 +1,34 @@
+type Transactions {
+    transactionExternalId: ID!
+    accountExternalIdDebit: String!
+    accountExternalIdCredit: String!
+    transferTypeId: Int!
+    value: Float!
+    transactionType: TransactionType!
+    transactionStatus: TransactionStatus!
+    createdAt: String!
+}
+
+enum TransactionType {
+    TRANSFER,
+    REFUND,
+    PAYMENT,
+    DEPOSIT,
+    CHARGE,
+    CHARGE_BACK,
+    OTHERS
+}
+
+enum TransactionStatus {
+    PENDING
+    REJECTED
+    ACCEPTED
+}
+
+type Query {
+    getTransaction(transactionExternalId: String!): Transactions
+}
+
+type Mutation {
+    createTransaction(accountExternalIdDebit: ID!, accountExternalIdCredit: ID!, transferTypeId: Int!, value: Float!): Transactions
+}
