@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class AntifraudValidationServiceApplicationTests {
 
     @Test
-    void contextLoads() {
+    void applicationStarts() {
+        AntifraudValidationServiceApplication.main(new String[]{});
     }
-
 }
