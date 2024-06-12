@@ -1,0 +1,35 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: antifraud-yape
+
+  kafka:
+    bootstrap-servers: kafka:29092
+    #bootstrap-servers: localhost:9092
+    topic:
+      antifraud-validate: antifraud
+      transaction-update: transaction
+    producer:
+      key-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+    consumer:
+      group-id: antifraud-group
+      auto-offset-reset: earliest
+      key-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            type:
+              mapping: 'com.yape.transaction.infrastructure.models.AntifraudMessageModel:com.yape.antifraud.infrastructure.models.AntifraudMessageModel'
+            trusted:
+              packages: 'com.yape.transaction.infrastructure.models'
+
+    listener:
+      missing-topics-fatal: false
+
+antifraud:
+  limit-amount: 1000
