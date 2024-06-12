@@ -1,0 +1,43 @@
+scalar BigDecimal
+scalar LocalDateTime
+scalar UUID
+
+type TransactionModelResponse {
+   transactionExternalId: UUID!
+   transactionType: TransactionType
+   transactionStatus: TransactionStatus
+   value: BigDecimal
+   createAt: LocalDateTime
+}
+
+type TransactionCreateModelResponse {
+   transactionExternalId: UUID!
+   transactionType: TransactionType
+   value: BigDecimal
+   createAt: LocalDateTime
+}
+
+type TransactionType {
+   name : String
+}
+
+type TransactionStatus {
+   name : String
+}
+
+input TransactionModelRequest {
+   accountExternalIdDebit : UUID
+   accountExternalIdCredit: UUID
+   transferTypeId: Int
+   value: BigDecimal
+}
+
+type Query {
+   getTransactionByCode(code : UUID) : TransactionModelResponse
+   getAllTransactions : [TransactionModelResponse]
+}
+
+type Mutation {
+   register(request : TransactionModelRequest) : TransactionCreateModelResponse
+}
+
