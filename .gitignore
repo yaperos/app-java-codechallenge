@@ -1,0 +1,68 @@
+### Intellij ###
+antifraud-yape/.idea/
+antifraud-yape/.idea_modules/
+
+# JIRA plugin
+### Java ###
+# Compiled class file
+antifraud-yape/*.class
+
+
+# Package Files #
+antifraud-yape/*.jar
+antifraud-yape/*.war
+
+### Gradle ###
+antifraud-yape/.gradle
+antifraud-yape/**/build/
+antifraud-yape/!src/**/build/
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+antifraud-yape/!gradle-wrapper.jar
+
+# Avoid ignore Gradle wrappper properties
+antifraud-yape/!gradle-wrapper.properties
+
+# Cache of project
+antifraud-yape/.gradletasknamecache
+
+# Eclipse Gradle plugin generated files
+# Eclipse Core
+antifraud-yape/.project
+# JDT-specific (Eclipse Java Development Tools)
+antifraud-yape/.classpath
+
+
+### Intellij ###
+transaction-yape/.idea/
+transaction-yape/.idea_modules/
+
+# JIRA plugin
+### Java ###
+# Compiled class file
+transaction-yape/*.class
+
+
+# Package Files #
+transaction-yape/*.jar
+transaction-yape/*.war
+
+### Gradle ###
+transaction-yape/.gradle
+transaction-yape/**/build/
+transaction-yape/!src/**/build/
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+transaction-yape/!gradle-wrapper.jar
+
+# Avoid ignore Gradle wrappper properties
+transaction-yape/!gradle-wrapper.properties
+
+# Cache of project
+transaction-yape/.gradletasknamecache
+
+# Eclipse Gradle plugin generated files
+# Eclipse Core
+transaction-yape/.project
+# JDT-specific (Eclipse Java Development Tools)
+transaction-yape/.classpath

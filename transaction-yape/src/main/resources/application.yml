@@ -1,0 +1,69 @@
+spring:
+  application:
+    name: transaction-yape
+
+  datasource:
+    #url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://postgres:5432/postgres
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop #dev
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  graphql:
+    graphiql:
+      enabled: true
+      path: graphiql
+
+
+  kafka:
+    #bootstrap-servers: localhost:9092
+    bootstrap-servers: kafka:29092
+    topic:
+      antifraud-validate: antifraud
+      transaction-update: transaction
+    producer:
+      key-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+    consumer:
+      group-id: transaction-group
+      auto-offset-reset: earliest
+      key-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            type:
+              mapping: 'com.yape.antifraud.infrastructure.models.TransactionMessageModel:com.yape.transaction.infrastructure.models.TransactionMessageModel'
+            trusted:
+              packages: 'com.yape.antifraud.infrastructure.models'
+
+    listener:
+      missing-topics-fatal: false
+
+
+  data:
+    redis:
+      host: cache
+      #host: localhost
+      port: 6379
+      password: jA29i4X5mt9QK9Cvr
+      ttl: 60
+
+logging:
+  level:
+    org.springframework.cache: TRACE

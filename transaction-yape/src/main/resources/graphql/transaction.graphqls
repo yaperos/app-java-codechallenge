@@ -1,0 +1,34 @@
+type GetTransactionResponseModel {
+    transactionExternalId: String
+    transactionType: TransactionType
+    transactionStatus: TransactionStatus
+    value: Float
+    createdAt: String
+}
+
+type TransactionType {
+    name: String
+}
+
+type TransactionStatus {
+    name: String
+}
+
+input CreateTransactionRequestModel {
+    transferTypeId: Int
+    value: Float
+    accountExternalIdDebit: String
+    accountExternalIdCredit: String
+}
+
+input GetTransactionRequestModel {
+    transactionExternalId: String
+}
+
+type Query {
+    getTransaction(getTransactionRequestModel : GetTransactionRequestModel): GetTransactionResponseModel
+}
+
+type Mutation {
+    createTransaction(createTransactionRequestModel : CreateTransactionRequestModel): GetTransactionResponseModel
+}

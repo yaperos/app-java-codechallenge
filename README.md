@@ -1,84 +1,82 @@
-# Yape Code Challenge :rocket:
 
-Our code challenge will let you marvel us with your Jedi coding skills :smile:. 
+# Yape Challenge - Karl Renzo Alcala Paucar
 
-Don't forget that the proper way to submit your work is to fork the repo and create a PR :wink: ... have fun !!
+## Description
 
-- [Yape Code Challenge :rocket:](#yape-code-challenge-rocket)
-- [Problem](#problem)
-- [Tech Stack](#tech-stack)
-  - [Optional](#optional)
-- [Send us your challenge](#send-us-your-challenge)
+### Arquitectura del Proyecto
 
-# Problem
+Para la solución a este problema se decidió implementar Clean Architecture el cual se encuentra definido en el libro Clean Architecture por Robert C. Martin, este tipo de arquitectura trata de englobar las arquitecturas previamente existentes tales como Hexagonal, Onion, etc. Y nos brinda ciertas ventajas tales como: facilidad para realizar tests, independencia de frameworks, independencia de la base de datos, independencia de cualquier agente externo y independencia de UI.
 
-Every time a financial transaction is created it must be validated by our anti-fraud microservice and then the same service sends a message back to update the transaction status.
-For now, we have only three transaction statuses:
+<img width="1047" alt="Screenshot 2024-06-11 at 9 12 45 PM" src="https://github.com/RenzoAlcala/app-java-codechallenge/assets/13078342/faadc8f3-9deb-4a0d-99d8-afe1eb9af00d">
 
-<ol>
-  <li>pending</li>
-  <li>approved</li>
-  <li>rejected</li>  
-</ol>
+### Estructura del Proyecto
+El proyecto ha sido dividido en 3 capas:
 
-Every transaction with a value greater than 1000 should be rejected.
+- Entities: en esta capa de almacenan todas las entidades de negocio (estos pueden ser simples estructuras de datos con métodos), son los componentes de más alto nivel, debido a esto, son los que muy probablemente no cambien debido a cambios externos.
+- Uses cases: en esta capa se encuentran las reglas de negocio de la aplicación, esto significa que los componentes en esta capa se encargan de administrar las entidades de negocio y el flujo de los datos.
+- Infrastructure: en esta capa tenemos todos los componentes de mas bajo nivel tales como componentes de base de datos, framework GraphQL, framework RestController, por los que estos componentes estan destinados como conexión con otras aplicaciones externas.
 
-```mermaid
-  flowchart LR
-    Transaction -- Save Transaction with pending Status --> transactionDatabase[(Database)]
-    Transaction --Send transaction Created event--> Anti-Fraud
-    Anti-Fraud -- Send transaction Status Approved event--> Transaction
-    Anti-Fraud -- Send transaction Status Rejected event--> Transaction
-    Transaction -- Update transaction Status event--> transactionDatabase[(Database)]
+### Componentes de la solución
+
+- Antifraud: este es un microservicio construido usando Spring Boot el cual tiene como objetivo validar el monto de las transacciones creadas en el componente Transaction, este componente es un Consumer Kafka y recibe los mensajes debido a que esta suscrito al topic "antifraud". Después de realizar la validación, mandara un mensaje al topic "transaction" para actualizar el estado de la transacción "APPROVED" or "REJECTED", esto lo logra debido a que también es un Producer kafka.
+
+- Transaction: este es un microservicio construido con Spring Boot el cual tiene como objetivo realizar distintas operaciones a las transacciones, tiene métodos para crear, modificar estado y obtener una transacción. Tiene una conexión a la base de datos Postgres para realizar dichas operaciones. Este microservicio es un Producer Kafka porque durante el proceso de crear una transacción, este componente envia un mensaje al topic "antifraud" para que el microservicio Antifraud valide el monto de la transacción. Además este microservicio se comporta como un Consumer para que pueda recibir las peticiones de modificación de estado que envia el componente "antifraud". 
+
+- Kafka: este componente es utilizado para la comunicación entre el microservicio de Antifraud y Transaction. Además, utiliza 2 topics: "antifraud" y "transaction", el primero sirve para validar el monto de las transacciones, el consumer es el microservicio Antifraud, el segundo es utilizado para actualizar el estado de la transacción, el consumer de este topic es el microservicio de "Transaction".
+
+- Postgres: es una base de datos relacional que servirá para persistir las transacciones, contendrá una sola tabla Transaction con todas las columnas necesarias para guardar la información de la transacción. El microservicio de Transaction se conectara a esta base de datos utilizando un pool de conexiones que sera administrada por el framework HikariCP.
+
+- Redis: Componente que funcionará como cache para la operación de consultar transacciones.
+
+<img width="1348" alt="Screenshot 2024-06-11 at 8 45 29 PM" src="https://github.com/RenzoAlcala/app-java-codechallenge/assets/13078342/24d10d78-a7df-4a6e-95ea-03a1582613f4">
+
+
+### Endpoints
+
+Se cuentan con los siguientes recursos en GraphQL:
+
+- Mutation: createTransaction: Crear transaction y validarlo
+- Query: getTransaction: Obtener una transaction por código
+
+## Tech Stack
+
+**Server:** Spring boot, GraphQL, Kafka, Gradle, Postgres, Lombok, JUnit, HikariCP
+
+
+## Levantar proyecto localmente
+
+Clone the project
+
+```bash
+  git clone https://github.com/RenzoAlcala/app-java-codechallenge.git
 ```
 
-# Tech Stack
+Go to the project directory
 
-<ol>
-  <li>Java. You can use any framework you want</li>
-  <li>Any database</li>
-  <li>Kafka</li>
-</ol>
-
-We do provide a `Dockerfile` to help you get started with a dev environment.
-
-You must have two resources:
-
-1. Resource to create a transaction that must containt:
-
-```json
-{
-  "accountExternalIdDebit": "Guid",
-  "accountExternalIdCredit": "Guid",
-  "tranferTypeId": 1,
-  "value": 120
-}
+```bash
+  cd app-java-codechallenge
 ```
 
-2. Resource to retrieve a transaction
+Start all the components
 
-```json
-{
-  "transactionExternalId": "Guid",
-  "transactionType": {
-    "name": ""
-  },
-  "transactionStatus": {
-    "name": ""
-  },
-  "value": 120,
-  "createdAt": "Date"
-}
+```bash
+  docker-compose up
 ```
 
-## Optional
 
-You can use any approach to store transaction data but you should consider that we may deal with high volume scenarios where we have a huge amount of writes and reads for the same data at the same time. How would you tackle this requirement?
+## Correr tests
 
-You can use Graphql;
+To run tests, run the following command
 
-# Send us your challenge
+```bash
+  ./gradlew clean test --info
+```
 
-When you finish your challenge, after forking a repository, you **must** open a pull request to our repository. There are no limitations to the implementation, you can follow the programming paradigm, modularization, and style that you feel is the most appropriate solution.
+## Requisitos
 
-If you have any questions, please let us know.
+Tener instalado docker.
+
+## Autor
+
+- Karl Renzo Alcala Paucar
+
