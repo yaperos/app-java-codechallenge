@@ -1,0 +1,124 @@
+{
+	"info": {
+		"_postman_id": "2ca7e9fd-341c-43ab-b788-b1dd53be86b5",
+		"name": "Transaction Service",
+		"description": "Collection for creating and retrieving transactions",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7764285"
+	},
+	"item": [
+		{
+			"name": "Create Transaction JSON",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"query\": \"mutation { createTransaction(accountExternalIdDebit: \\\"1234\\\", accountExternalIdCredit: \\\"5678\\\", transferTypeId: 1, value: 120) { transactionExternalId accountExternalIdDebit accountExternalIdCredit transferTypeId value transactionStatus createdAt } }\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve Transaction JSON",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"query\": \"mutation { createTransaction(accountExternalIdDebit: \\\"1234\\\", accountExternalIdCredit: \\\"5678\\\", transferTypeId: 1, value: 120) { transactionExternalId accountExternalIdDebit accountExternalIdCredit transferTypeId value transactionStatus createdAt } }\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Transaction GraphQL",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\r\n  createTransaction(accountExternalIdDebit: \"123e4567-e89b-12d3-a456-426655440000\"\r\n, accountExternalIdCredit: \"123e4567-e89b-12d3-a456-426655440000\", transferTypeId: 1, value: 120) {\r\n    transactionExternalId\r\n    accountExternalIdDebit\r\n    accountExternalIdCredit\r\n    transferTypeId\r\n    value\r\n    transactionStatus\r\n    createdAt\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetTransaction GraphQL",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "{\r\n  getTransaction(transactionExternalId: \"22c6d270-77ea-4afd-89e4-16a593df4af2\") {\r\n    transactionExternalId\r\n    accountExternalIdDebit\r\n    accountExternalIdCredit\r\n    transferTypeId\r\n    value\r\n    transactionStatus\r\n    createdAt\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
