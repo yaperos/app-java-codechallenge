@@ -1,0 +1,35 @@
+scalar BigDecimal
+scalar UUID
+
+type YapeTransactionSingleRetrieval {
+	transactionExternalId: UUID
+	accountExternalIdDebit: UUID
+	accountExternalIdCredit: UUID
+	transactionType: TransactionType
+	value: BigDecimal
+	transactionStatus: TransactionStatus
+	createdAt: String
+}
+
+input YapeTransactionInsertion {
+    accountExternalIdDebit: UUID
+    accountExternalIdCredit: UUID
+    transferTypeId: Int!
+    value: BigDecimal!
+}
+
+type TransactionStatus {
+  name: String
+}
+
+type TransactionType {
+  name: String
+}
+
+type Query {
+    getTransaction(transactionExternalId: UUID!): YapeTransactionSingleRetrieval
+}
+
+type Mutation {
+    createTransaction(input: YapeTransactionInsertion!): YapeTransactionSingleRetrieval
+}
